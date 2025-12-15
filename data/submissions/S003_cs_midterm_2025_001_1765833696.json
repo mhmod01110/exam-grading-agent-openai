@@ -1,0 +1,79 @@
+{
+  "student_id": "S003",
+  "student_name": "Mahmoud Shawqi",
+  "exam_id": "cs_midterm_2025_001",
+  "answers": [
+    {
+      "question_id": "q_001_time_complexity",
+      "response": "O(n)",
+      "time_spent": null,
+      "attempt_number": 1,
+      "metadata": {}
+    },
+    {
+      "question_id": "q_002_stack_concept",
+      "response": "Last-In, First-Out. It means the last element added to the stack is the first one to be removed . Its Application is UNDO Function",
+      "time_spent": null,
+      "attempt_number": 1,
+      "metadata": {}
+    },
+    {
+      "question_id": "q_003_python_coding",
+      "response": "def reverse_list(my_list) :\\n new_list = []\\n for i in range(len(my_list) -1): \\nnew_list.append(my_list(len(my_list) - i - 1))  \\nreturn new_list",
+      "time_spent": null,
+      "attempt_number": 1,
+      "metadata": {}
+    },
+    {
+      "question_id": "q_004_binary_conversion",
+      "response": "101010",
+      "time_spent": null,
+      "attempt_number": 1,
+      "metadata": {}
+    },
+    {
+      "question_id": "q_005_linked_list_memory",
+      "response": "False",
+      "time_spent": null,
+      "attempt_number": 1,
+      "metadata": {}
+    },
+    {
+      "question_id": "q_006_sorting_stability",
+      "response": "Quick Sort",
+      "time_spent": null,
+      "attempt_number": 1,
+      "metadata": {}
+    },
+    {
+      "question_id": "q_007_queue_operations",
+      "response": "enqueue enters data into back of queue and dequeue get the first element of queue",
+      "time_spent": null,
+      "attempt_number": 1,
+      "metadata": {}
+    },
+    {
+      "question_id": "q_008_binary_search_tree",
+      "response": "2",
+      "time_spent": null,
+      "attempt_number": 1,
+      "metadata": {}
+    },
+    {
+      "question_id": "q_009_python_dict_get",
+      "response": "age = student_data.get('age' , '-1')",
+      "time_spent": null,
+      "attempt_number": 1,
+      "metadata": {}
+    },
+    {
+      "question_id": "q_010_big_o_nested_loops",
+      "response": "O(n^2)",
+      "time_spent": null,
+      "attempt_number": 1,
+      "metadata": {}
+    }
+  ],
+  "submitted_at": "2025-12-15T23:21:36.972614",
+  "metadata": {}
+}

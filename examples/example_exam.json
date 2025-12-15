@@ -1,0 +1,174 @@
+{
+  "id": "cs_midterm_2025_001",
+  "title": "CS101: Data Structures & Algorithms Midterm",
+  "description": "Midterm examination covering Big O notation, basic data structures (Arrays, Linked Lists, Stacks), and Python programming fundamentals.",
+  "subject": "Computer Science",
+  "duration_minutes": 90,
+  "passing_score": 65.0,
+  "created_at": "2025-10-15T09:00:00.000000",
+  "metadata": {
+    "semester": "Fall 2025",
+    "instructor": "Dr. Sarah Connor",
+    "version": "1.0"
+  },
+  "grading_config": {
+    "strictness": 0.8,
+    "enable_partial_credit": true,
+    "semantic_matching": true,
+    "case_sensitive": false,
+    "ignore_whitespace": true,
+    "spelling_tolerance": 0.9,
+    "ai_grading_enabled": true,
+    "min_essay_length": 30,
+    "code_execution": true
+  },
+  "questions": [
+    {
+      "id": "q_001_time_complexity",
+      "text": "What is the worst-case time complexity of accessing an element in a Hash Table (assuming many collisions and chaining)?",
+      "question_type": "multiple_choice",
+      "points": 5.0,
+      "difficulty": "medium",
+      "topics": ["Big O", "Hash Tables", "Data Structures"],
+      "options": [
+        "O(1)",
+        "O(log n)",
+        "O(n)",
+        "O(n^2)"
+      ],
+      "correct_answer": "O(n)",
+      "explanation": "While average case is O(1), in the worst case (all keys hashing to the same slot), it degrades to O(n) as you must traverse the linked list."
+    },
+    {
+      "id": "q_002_stack_concept",
+      "text": "Explain the LIFO principle in the context of a Stack data structure and provide one real-world computing example of its usage.",
+      "question_type": "short_answer",
+      "points": 10.0,
+      "difficulty": "easy",
+      "topics": ["Stacks", "LIFO", "Memory"],
+      "correct_answer": "LIFO stands for Last-In, First-Out. It means the last element added to the stack is the first one to be removed. A real-world example is the 'Undo' feature in text editors or function call management (call stack) in compilers.",
+      "rubric": {
+        "definition": {
+          "description": "Correctly defines LIFO",
+          "points": 5
+        },
+        "example": {
+          "description": "Provides a valid computing example (Undo, Call Stack, Browser History)",
+          "points": 5
+        }
+      }
+    },
+    {
+      "id": "q_003_python_coding",
+      "text": "Write a Python function named `reverse_list` that takes a list of integers and returns a new list with the elements in reverse order. Do not use the built-in `reverse()` method or `[::-1]` slicing.",
+      "question_type": "code",
+      "points": 20.0,
+      "difficulty": "hard",
+      "topics": ["Python", "Algorithms", "Arrays"],
+      "correct_answer": "def reverse_list(arr):\n    new_arr = []\n    for i in range(len(arr) - 1, -1, -1):\n        new_arr.append(arr[i])\n    return new_arr",
+      "explanation": "Iterates backwards through the input list and appends to a new list.",
+      "partial_credit_rules": {
+        "correct_function_signature": 0.2,
+        "correct_loop_logic": 0.5,
+        "returns_list": 0.3
+      }
+    },
+    {
+      "id": "q_004_binary_conversion",
+      "text": "Convert the decimal number 42 to binary.",
+      "question_type": "numerical",
+      "points": 5.0,
+      "difficulty": "easy",
+      "topics": ["Number Systems", "Binary"],
+      "correct_answer": 101010,
+      "metadata": {
+        "allow_string_answer": true
+      }
+    },
+    {
+      "id": "q_005_linked_list_memory",
+      "text": "True or False: In a Singly Linked List, memory is allocated contiguously.",
+      "question_type": "true_false",
+      "points": 5.0,
+      "difficulty": "easy",
+      "topics": ["Linked Lists", "Memory"],
+      "correct_answer": "False",
+      "explanation": "Linked Lists nodes are allocated dynamically on the heap and can be scattered in memory; they are connected via pointers, unlike Arrays which are contiguous."
+    },
+    {
+      "id": "q_006_sorting_stability",
+      "text": "Which of the following sorting algorithms is NOT stable by default?",
+      "question_type": "multiple_choice",
+      "points": 5.0,
+      "difficulty": "medium",
+      "topics": ["Sorting", "Algorithms", "Stability"],
+      "options": [
+        "Merge Sort",
+        "Insertion Sort",
+        "Bubble Sort",
+        "Quick Sort"
+      ],
+      "correct_answer": "Quick Sort",
+      "explanation": "Quick Sort is inherently unstable because it swaps non-adjacent elements, potentially changing the relative order of equal keys. Merge, Insertion, and Bubble sorts are stable."
+    },
+    {
+      "id": "q_007_queue_operations",
+      "text": "Describe the difference between 'enqueue' and 'dequeue' operations in a Queue data structure. ",
+      "question_type": "short_answer",
+      "points": 8.0,
+      "difficulty": "easy",
+      "topics": ["Queue", "Data Structures", "FIFO"],
+      "correct_answer": "Enqueue adds an element to the rear (back) of the queue, while dequeue removes an element from the front of the queue. This follows the FIFO (First-In, First-Out) principle.",
+      "rubric": {
+        "enqueue_definition": {
+          "description": "Correctly defines enqueue as adding to the rear",
+          "points": 4
+        },
+        "dequeue_definition": {
+          "description": "Correctly defines dequeue as removing from the front",
+          "points": 4
+        }
+      }
+    },
+    {
+      "id": "q_008_binary_search_tree",
+      "text": "Given the following list of numbers inserted into an empty Binary Search Tree (BST) in order: [10, 5, 15, 3, 7]. What is the height of the resulting tree? (Assume the root is at height 0).",
+      "question_type": "numerical",
+      "points": 5.0,
+      "difficulty": "medium",
+      "topics": ["Trees", "BST", "Data Structures"],
+      "correct_answer": 2,
+      "explanation": "Root is 10 (h0). Children are 5, 15 (h1). Children of 5 are 3, 7 (h2). The max depth is 2."
+    },
+    {
+      "id": "q_009_python_dict_get",
+      "text": "Write a Python code snippet using the `.get()` method to safely retrieve the value for key 'age' from a dictionary named `student_data`. If the key does not exist, it should return -1.",
+      "question_type": "code",
+      "points": 10.0,
+      "difficulty": "easy",
+      "topics": ["Python", "Dictionaries", "Error Handling"],
+      "correct_answer": "value = student_data.get('age', -1)",
+      "explanation": "The get method takes two arguments: the key to look up, and a default value to return if the key is missing.",
+      "partial_credit_rules": {
+        "uses_get_method": 0.5,
+        "correct_default_value": 0.5
+      }
+    },
+    {
+      "id": "q_010_big_o_nested_loops",
+      "text": "Analyze the time complexity of the following code:\n\nfor i in range(n):\n    for j in range(n):\n        print(i, j)",
+      "question_type": "multiple_choice",
+      "points": 5.0,
+      "difficulty": "easy",
+      "topics": ["Big O", "Algorithms", "Loops"],
+      "options": [
+        "O(n)",
+        "O(n log n)",
+        "O(n^2)",
+        "O(1)"
+      ],
+      "correct_answer": "O(n^2)",
+      "explanation": "There are two nested loops, each running 'n' times. This results in n * n iterations, which is quadratic time complexity O(n^2)."
+    }
+  ]
+}

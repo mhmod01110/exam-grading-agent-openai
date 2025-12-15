@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Grading & Feedback Agent</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab:hover {
+            background: #e9e9e9;
+            color: #333;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .question-item {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .question-type-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            background: #667eea;
+            color: white;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .result-card {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .grade-badge {
+            font-size: 3em;
+            font-weight: bold;
+            padding: 20px;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .grade-a { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important; }
+        .grade-b { background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%) !important; }
+        .grade-c { background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%) !important; }
+        .grade-d { background: linear-gradient(135deg, #ee9ca7 0%, #ffdde1 100%) !important; }
+        .grade-f { background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%) !important; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .feedback-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .question-result {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ddd;
+        }
+
+        .question-result.correct {
+            border-left-color: #28a745;
+        }
+
+        .question-result.incorrect {
+            border-left-color: #dc3545;
+        }
+
+        .chart-container {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .hide {
+            display: none !important;
+        }
+
+        .exam-card {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .exam-card:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .exam-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .api-status {
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .api-status.connected {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .api-status.disconnected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Exam Grading & Feedback Agent</h1>
+            <p>Powered by OpenAI GPT-4</p>
+            <div id="apiStatus" class="api-status"></div>
+        </div>
+
+        <div class="tabs">
+          <div class="tab active" onclick="showTab('create', this)">📝 Create Exam</div>
+          <div class="tab" onclick="showTab('take', this)">✍️ Take Exam</div>
+          <div class="tab" onclick="showTab('grade', this)">✅ Grade & Results</div>
+          <div class="tab" onclick="showTab('analytics', this)">📊 Analytics</div>
+      </div>
+
+        <div class="content">
+            <!-- Create Exam Section -->
+            <div id="create" class="section active">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2>Create New Exam</h2>
+                
+                <div>
+                    <input type="file" id="jsonLoader" accept=".json" style="display: none;" onchange="loadJsonFile(this)">
+                    <button class="btn btn-secondary" onclick="document.getElementById('jsonLoader').click()">
+                        📂 Load from JSON
+                    </button>
+                </div>
+                </div>
+        
+            <div id="createAlert"></div>
+                
+                <div class="form-group">
+                    <label>Exam ID</label>
+                    <input type="text" id="examId" placeholder="e.g., midterm_2024">
+                </div>
+
+                <div class="form-group">
+                    <label>Exam Title</label>
+                    <input type="text" id="examTitle" placeholder="e.g., Computer Science Midterm">
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="examDescription" placeholder="Brief description of the exam"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Subject</label>
+                    <input type="text" id="examSubject" placeholder="e.g., Computer Science">
+                </div>
+
+                <div class="form-group">
+                    <label>Passing Score (%)</label>
+                    <input type="number" id="passingScore" value="60" min="0" max="100">
+                </div>
+
+                <h3 style="margin-top: 30px;">Questions</h3>
+                <div id="questionsList"></div>
+
+                <button class="btn btn-secondary" onclick="addQuestion()">+ Add Question</button>
+                <button class="btn btn-primary" onclick="createExam()">Create Exam</button>
+                <button class="btn btn-success" onclick="createExampleExam()">Create Example Exam</button>
+            </div>
+
+            <!-- Take Exam Section -->
+            <div id="take" class="section">
+                <h2>Take Exam</h2>
+                <div id="takeAlert"></div>
+
+                <div id="examSelector">
+                    <h3>Available Exams</h3>
+                    <div id="examsList"></div>
+                </div>
+
+                <div id="examForm" class="hide">
+                    <h3 id="examFormTitle"></h3>
+                    
+                    <div class="form-group">
+                        <label>Student ID</label>
+                        <input type="text" id="studentId" placeholder="e.g., S001">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Student Name</label>
+                        <input type="text" id="studentName" placeholder="e.g., John Doe">
+                    </div>
+
+                    <div id="examQuestions"></div>
+
+                    <button class="btn btn-primary" onclick="submitExam()">Submit Answers</button>
+                    <button class="btn btn-secondary" onclick="backToExamList()">Back</button>
+                </div>
+            </div>
+
+            <!-- Grade & Results Section -->
+            <div id="grade" class="section">
+                <h2>Grading Results</h2>
+                <div id="gradeAlert"></div>
+                <div id="resultsContainer"></div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div id="analytics" class="section">
+                <h2>Class Analytics</h2>
+                <div id="analyticsAlert"></div>
+                
+                <div class="form-group">
+                    <label>Select Exam for Analytics</label>
+                    <select id="analyticsExamSelect" onchange="loadAnalytics()">
+                        <option value="">-- Select Exam --</option>
+                    </select>
+                </div>
+
+                <div id="analyticsContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000/api';
+        let currentExam = null;
+        let questionCounter = 1;
+
+        // Check API status on load
+        async function checkAPIStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                const statusEl = document.getElementById('apiStatus');
+                
+                if (data.api_configured) {
+                    statusEl.className = 'api-status connected';
+                    statusEl.textContent = `✓ API Connected (${data.model})`;
+                } else {
+                    statusEl.className = 'api-status disconnected';
+                    statusEl.textContent = '⚠ API Not Configured';
+                }
+            } catch (error) {
+                const statusEl = document.getElementById('apiStatus');
+                statusEl.className = 'api-status disconnected';
+                statusEl.textContent = '✗ API Unreachable';
+            }
+        }
+
+        function showTab(tabName, clickedElement) {
+          // Update tabs
+          document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+          
+          // Check if clickedElement is provided, otherwise find the tab that corresponds to tabName
+          if (clickedElement) {
+              clickedElement.classList.add('active');
+          }
+      
+          // Update sections
+          document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+          document.getElementById(tabName).classList.add('active');
+      
+          // Load data for specific tabs
+          if (tabName === 'take') {
+              loadExams();
+          } else if (tabName === 'analytics') {
+              loadExamsForAnalytics();
+          }
+      }
+
+        function addQuestion() {
+            const questionsList = document.getElementById('questionsList');
+            const questionId = `q${questionCounter++}`;
+            
+            const questionHTML = `
+                <div class="question-item" id="question-${questionId}">
+                    <div class="question-header">
+                        <strong>Question ${questionId}</strong>
+                        <button class="btn btn-danger" style="padding: 5px 15px;" onclick="removeQuestion('${questionId}')">Remove</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Question Text</label>
+                        <textarea class="q-text" placeholder="Enter question text"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Question Type</label>
+                        <select class="q-type" onchange="updateQuestionType('${questionId}', this.value)">
+                            <option value="short_answer">Short Answer</option>
+                            <option value="essay">Essay</option>
+                            <option value="multiple_choice">Multiple Choice</option>
+                            <option value="true_false">True/False</option>
+                            <option value="numerical">Numerical</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group q-options-${questionId} hide">
+                        <label>Options (comma-separated)</label>
+                        <input type="text" class="q-options" placeholder="A) Option1, B) Option2, C) Option3">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Correct Answer</label>
+                        <input type="text" class="q-answer" placeholder="Enter correct answer">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Points</label>
+                        <input type="number" class="q-points" value="10" min="1">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Topics (comma-separated)</label>
+                        <input type="text" class="q-topics" placeholder="e.g., Algebra, Equations">
+                    </div>
+                </div>
+            `;
+            
+            questionsList.insertAdjacentHTML('beforeend', questionHTML);
+        }
+
+        function updateQuestionType(questionId, type) {
+            const optionsDiv = document.querySelector(`.q-options-${questionId}`);
+            if (type === 'multiple_choice') {
+                optionsDiv.classList.remove('hide');
+            } else {
+                optionsDiv.classList.add('hide');
+            }
+        }
+
+        function removeQuestion(questionId) {
+            document.getElementById(`question-${questionId}`).remove();
+        }
+
+        async function createExam() {
+            const alertDiv = document.getElementById('createAlert');
+            
+            try {
+                const questions = [];
+                document.querySelectorAll('.question-item').forEach((item, index) => {
+                    const id = item.id.replace('question-', '');
+                    const text = item.querySelector('.q-text').value;
+                    const type = item.querySelector('.q-type').value;
+                    const answer = item.querySelector('.q-answer').value;
+                    const points = parseFloat(item.querySelector('.q-points').value);
+                    const topics = item.querySelector('.q-topics').value.split(',').map(t => t.trim()).filter(t => t);
+                    
+                    const question = {
+                        id,
+                        text,
+                        type,
+                        correct_answer: answer,
+                        points,
+                        topics,
+                        difficulty: 'medium'
+                    };
+
+                    if (type === 'multiple_choice') {
+                        const options = item.querySelector('.q-options').value.split(',').map(o => o.trim());
+                        question.options = options;
+                    }
+
+                    questions.push(question);
+                });
+
+                const examData = {
+                    id: document.getElementById('examId').value,
+                    title: document.getElementById('examTitle').value,
+                    description: document.getElementById('examDescription').value,
+                    subject: document.getElementById('examSubject').value,
+                    passing_score: parseFloat(document.getElementById('passingScore').value),
+                    questions,
+                    grading_config: {
+                        strictness: 0.7,
+                        enable_partial_credit: true,
+                        ai_grading_enabled: true
+                    }
+                };
+
+                const response = await fetch(`${API_BASE}/exams`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(examData)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    alertDiv.innerHTML = `<div class="alert alert-success">✓ Exam created successfully! (${result.question_count} questions, ${result.total_points} points)</div>`;
+                    // Clear form
+                    document.querySelectorAll('.question-item').forEach(el => el.remove());
+                    questionCounter = 1;
+                } else {
+                    alertDiv.innerHTML = `<div class="alert alert-error">✗ Error: ${result.error}</div>`;
+                }
+            } catch (error) {
+                alertDiv.innerHTML = `<div class="alert alert-error">✗ Error: ${error.message}</div>`;
+            }
+        }
+
+        async function createExampleExam() {
+            const alertDiv = document.getElementById('createAlert');
+            
+            try {
+                const response = await fetch(`${API_BASE}/examples/create`, {
+                    method: 'POST'
+                });
+                const result = await response.json();
+                
+                if (response.ok) {
+                    alertDiv.innerHTML = `<div class="alert alert-success">✓ Example exam created! ID: ${result.exam_id}</div>`;
+                } else {
+                    alertDiv.innerHTML = `<div class="alert alert-error">✗ Error: ${result.error}</div>`;
+                }
+            } catch (error) {
+                alertDiv.innerHTML = `<div class="alert alert-error">✗ Error: ${error.message}</div>`;
+            }
+        }
+
+        async function loadExams() {
+            const examsList = document.getElementById('examsList');
+            examsList.innerHTML = '<div class="loading"><div class="spinner"></div>Loading exams...</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/exams`);
+                const exams = await response.json();
+                
+                if (exams.length === 0) {
+                    examsList.innerHTML = '<div class="alert alert-info">No exams available. Create one first!</div>';
+                    return;
+                }
+
+                examsList.innerHTML = '';
+                exams.forEach(exam => {
+                    const examCard = `
+                        <div class="exam-card" onclick="selectExam('${exam.id}')">
+                            <h3>${exam.title}</h3>
+                            <p>${exam.description}</p>
+                            <p><strong>${exam.question_count} questions</strong> | ${exam.total_points} points</p>
+                        </div>
+                    `;
+                    examsList.insertAdjacentHTML('beforeend', examCard);
+                });
+            } catch (error) {
+                examsList.innerHTML = `<div class="alert alert-error">Error loading exams</div>`;
+            }
+        }
+
+        async function selectExam(examId) {
+            try {
+                const response = await fetch(`${API_BASE}/exams/${examId}`);
+                currentExam = await response.json();
+                
+                document.getElementById('examSelector').classList.add('hide');
+                document.getElementById('examForm').classList.remove('hide');
+                document.getElementById('examFormTitle').textContent = currentExam.title;
+                
+                const questionsContainer = document.getElementById('examQuestions');
+                questionsContainer.innerHTML = '';
+                
+                currentExam.questions.forEach((q, index) => {
+                    let inputHTML = '';
+                    
+                    if (q.type === 'multiple_choice') {
+                      inputHTML = q.options.map(opt => 
+                          // 👇 FIX: Removed .charAt(0) so it sends the full text
+                          `<div><label><input type="radio" name="answer-${q.id}" value="${opt}"> ${opt}</label></div>`
+                      ).join('');
+                    } else if (q.type === 'true_false') {
+                        inputHTML = `
+                            <div><label><input type="radio" name="answer-${q.id}" value="True"> True</label></div>
+                            <div><label><input type="radio" name="answer-${q.id}" value="False"> False</label></div>
+                        `;
+                    } else if (q.type === 'essay') {
+                        inputHTML = `<textarea id="answer-${q.id}" rows="5" style="width: 100%;"></textarea>`;
+                    } else {
+                        inputHTML = `<input type="text" id="answer-${q.id}" style="width: 100%;">`;
+                    }
+                    
+                    const questionHTML = `
+                        <div class="question-item">
+                            <div class="question-header">
+                                <strong>Question ${index + 1}</strong>
+                                <span class="question-type-badge">${q.type} (${q.points} pts)</span>
+                            </div>
+                            <p style="margin: 10px 0;">${q.text}</p>
+                            ${inputHTML}
+                        </div>
+                    `;
+                    
+                    questionsContainer.insertAdjacentHTML('beforeend', questionHTML);
+                });
+            } catch (error) {
+                alert('Error loading exam');
+            }
+        }
+
+        function backToExamList() {
+            document.getElementById('examSelector').classList.remove('hide');
+            document.getElementById('examForm').classList.add('hide');
+        }
+
+        async function submitExam() {
+            const alertDiv = document.getElementById('takeAlert');
+            const studentId = document.getElementById('studentId').value;
+            const studentName = document.getElementById('studentName').value;
+            
+            if (!studentId || !studentName) {
+                alert('Please enter student ID and name');
+                return;
+            }
+
+            const answers = [];
+            currentExam.questions.forEach(q => {
+                let response;
+                
+                if (q.type === 'multiple_choice' || q.type === 'true_false') {
+                    const selected = document.querySelector(`input[name="answer-${q.id}"]:checked`);
+                    response = selected ? selected.value : '';
+                } else {
+                    response = document.getElementById(`answer-${q.id}`).value;
+                }
+                
+                answers.push({
+                    question_id: q.id,
+                    response
+                });
+            });
+
+            alertDiv.innerHTML = '<div class="loading"><div class="spinner"></div>Grading your exam...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/grade`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        exam_id: currentExam.id,
+                        student_id: studentId,
+                        student_name: studentName,
+                        answers,
+                        use_ai: true
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    // Show results
+                    showTab('grade');
+                    displayResults(result);
+                    alertDiv.innerHTML = '';
+                } else {
+                    alertDiv.innerHTML = `<div class="alert alert-error">✗ Error: ${result.error}</div>`;
+                }
+            } catch (error) {
+                alertDiv.innerHTML = `<div class="alert alert-error">✗ Error: ${error.message}</div>`;
+            }
+        }
+
+        function displayResults(result) {
+            const container = document.getElementById('resultsContainer');
+            
+            const gradeClass = `grade-${result.grade.toLowerCase()}`;
+            
+            let html = `
+                <div class="result-card">
+                    <div class="result-header">
+                        <div>
+                            <h2>${result.student_name}</h2>
+                            <p style="color: #666;">Score: ${result.total_score.toFixed(2)} / ${result.max_score.toFixed(2)}</p>
+                        </div>
+                        <div class="grade-badge ${gradeClass}">
+                            ${result.grade}
+                        </div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">Percentage</div>
+                            <div class="stat-value">${result.percentage.toFixed(1)}%</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Grade</div>
+                            <div class="stat-value">${result.grade}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Correct</div>
+                            <div class="stat-value">${result.question_results.filter(q => q.is_correct).length}/${result.question_results.length}</div>
+                        </div>
+                    </div>
+
+                    <div class="feedback-section">
+                        <h3>Overall Feedback</h3>
+                        <p>${result.overall_feedback}</p>
+                    </div>
+
+                    <h3 style="margin-top: 30px;">Question-by-Question Results</h3>
+            `;
+
+            result.question_results.forEach((qr, index) => {
+                const statusClass = qr.is_correct ? 'correct' : 'incorrect';
+                const statusIcon = qr.is_correct ? '✓' : '✗';
+                
+                html += `
+                    <div class="question-result ${statusClass}">
+                        <div class="question-header">
+                            <strong>${statusIcon} Question ${index + 1}</strong>
+                            <span>${qr.points_earned.toFixed(2)} / ${qr.points_possible.toFixed(2)} points</span>
+                        </div>
+                        <p style="margin: 10px 0;"><strong>Feedback:</strong> ${qr.feedback}</p>
+                        ${qr.suggestions && qr.suggestions.length > 0 ? `
+                            <div style="margin-top: 10px;">
+                                <strong>Suggestions:</strong>
+                                <ul>
+                                    ${qr.suggestions.map(s => `<li>${s}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            
+            container.innerHTML = html;
+        }
+
+        async function loadExamsForAnalytics() {
+            try {
+                const response = await fetch(`${API_BASE}/exams`);
+                const exams = await response.json();
+                
+                const select = document.getElementById('analyticsExamSelect');
+                select.innerHTML = '<option value="">-- Select Exam --</option>';
+                
+                exams.forEach(exam => {
+                    select.innerHTML += `<option value="${exam.id}">${exam.title}</option>`;
+                });
+            } catch (error) {
+                console.error('Error loading exams:', error);
+            }
+        }
+
+        async function loadAnalytics() {
+            const examId = document.getElementById('analyticsExamSelect').value;
+            const container = document.getElementById('analyticsContainer');
+            
+            if (!examId) {
+                container.innerHTML = '';
+                return;
+            }
+
+            container.innerHTML = '<div class="loading"><div class="spinner"></div>Loading analytics...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/analytics/${examId}`);
+                const data = await response.json();
+                
+                if (data.message) {
+                    container.innerHTML = `<div class="alert alert-info">${data.message}</div>`;
+                    return;
+                }
+
+                let html = `
+                    <div class="chart-container">
+                        <h3>Class Statistics</h3>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-label">Students</div>
+                                <div class="stat-value">${data.class_statistics.student_count}</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Mean Score</div>
+                                <div class="stat-value">${data.class_statistics.mean_score.toFixed(1)}%</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Median Score</div>
+                                <div class="stat-value">${data.class_statistics.median_score.toFixed(1)}%</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Passing Rate</div>
+                                <div class="stat-value">${data.class_statistics.passing_rate.toFixed(1)}%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>Grade Distribution</h3>
+                `;
+
+                Object.entries(data.grade_distribution).forEach(([grade, count]) => {
+                    const percentage = (count / data.class_statistics.student_count * 100).toFixed(1);
+                    html += `
+                        <div style="margin: 10px 0;">
+                            <strong>${grade}:</strong> 
+                            <span style="display: inline-block; width: 200px; background: #e0e0e0; height: 20px; border-radius: 5px; vertical-align: middle;">
+                                <span style="display: block; width: ${percentage}%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 100%; border-radius: 5px;"></span>
+                            </span>
+                            ${count} students (${percentage}%)
+                        </div>
+                    `;
+                });
+
+                html += `
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>Question Difficulty Analysis</h3>
+                        <p>Questions sorted by difficulty (hardest first):</p>
+                `;
+
+                data.question_statistics.forEach((q, index) => {
+                    html += `
+                        <div class="question-result" style="margin: 10px 0;">
+                            <div class="question-header">
+                                <strong>${index + 1}. ${q.question_text}</strong>
+                                <span>${q.accuracy.toFixed(1)}% correct</span>
+                            </div>
+                            <p><strong>Type:</strong> ${q.question_type} | <strong>Difficulty:</strong> ${q.actual_difficulty} | <strong>Students:</strong> ${q.students_correct}/${q.students_attempted}</p>
+                        </div>
+                    `;
+                });
+
+                html += `
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>Top Performers</h3>
+                `;
+
+                data.top_performers.forEach((student, index) => {
+                    html += `
+                        <div style="padding: 10px; background: white; margin: 10px 0; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong>${index + 1}. ${student.student_name}</strong>
+                                <span style="color: #666; margin-left: 10px;">(${student.student_id})</span>
+                            </div>
+                            <div>
+                                <span style="font-size: 1.5em; font-weight: bold; color: #667eea;">${student.score.toFixed(1)}%</span>
+                                <span style="margin-left: 10px; padding: 5px 10px; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; border-radius: 5px;">${student.grade}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += '</div>';
+
+                container.innerHTML = html;
+            } catch (error) {
+                container.innerHTML = `<div class="alert alert-error">Error loading analytics</div>`;
+            }
+        }
+        function loadJsonFile(input) {
+          const file = input.files[0];
+          if (!file) return;
+  
+          const reader = new FileReader();
+          reader.onload = function(e) {
+              try {
+                  const data = JSON.parse(e.target.result);
+                  populateExamForm(data);
+                  
+                  // Show success message
+                  const alertDiv = document.getElementById('createAlert');
+                  alertDiv.innerHTML = `<div class="alert alert-success">✓ Loaded "${file.name}" successfully!</div>`;
+                  
+                  // Clear input so you can load the same file again if needed
+                  input.value = '';
+              } catch (error) {
+                  alert('Error parsing JSON file: ' + error.message);
+              }
+          };
+          reader.readAsText(file);
+      }
+  
+      function populateExamForm(data) {
+          // 1. Fill Basic Fields
+          document.getElementById('examId').value = data.id || '';
+          document.getElementById('examTitle').value = data.title || '';
+          document.getElementById('examDescription').value = data.description || '';
+          document.getElementById('examSubject').value = data.subject || '';
+          document.getElementById('passingScore').value = data.passing_score || 60;
+  
+          // 2. Clear Existing Questions
+          document.getElementById('questionsList').innerHTML = '';
+          questionCounter = 1;
+  
+          // 3. Loop and Create Questions
+          if (data.questions && Array.isArray(data.questions)) {
+              data.questions.forEach(q => {
+                  // Add a blank question UI block
+                  addQuestion();
+                  
+                  // Get the ID of the just-added question (counter was incremented in addQuestion, so decrement by 1)
+                  const currentId = `q${questionCounter - 1}`;
+                  const qBlock = document.getElementById(`question-${currentId}`);
+                  
+                  // Populate Question Data
+                  qBlock.querySelector('.q-text').value = q.text || '';
+                  qBlock.querySelector('.q-points').value = q.points || 10;
+                  qBlock.querySelector('.q-answer').value = q.correct_answer || '';
+                  
+                  // Handle Topics (array to string)
+                  if (q.topics && Array.isArray(q.topics)) {
+                      qBlock.querySelector('.q-topics').value = q.topics.join(', ');
+                  }
+  
+                  // Handle Question Type & Options
+                  const typeSelect = qBlock.querySelector('.q-type');
+                  
+                  // Map API types (e.g., "multiple_choice") to Select values if they differ, 
+                  // but in your case they look identical.
+                  typeSelect.value = q.question_type || q.type || 'short_answer';
+                  
+                  // Trigger the visibility logic for options
+                  updateQuestionType(currentId, typeSelect.value);
+  
+                  // If Multiple Choice, fill options
+                  if (typeSelect.value === 'multiple_choice' && q.options) {
+                      qBlock.querySelector('.q-options').value = q.options.join(', ');
+                  }
+              });
+          }
+      }
+
+        // Initialize
+        checkAPIStatus();
+        addQuestion(); // Add first question by default
+    </script>
+</body>
+</html>

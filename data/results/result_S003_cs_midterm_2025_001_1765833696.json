@@ -1,0 +1,212 @@
+{
+  "student_id": "S003",
+  "student_name": "Mahmoud Shawqi",
+  "exam_id": "cs_midterm_2025_001",
+  "question_results": [
+    {
+      "question_id": "q_001_time_complexity",
+      "student_answer": "O(n)",
+      "correct_answer": "O(n)",
+      "points_earned": 5.0,
+      "points_possible": 5.0,
+      "is_correct": true,
+      "feedback": "Correct!",
+      "detailed_analysis": null,
+      "suggestions": []
+    },
+    {
+      "question_id": "q_002_stack_concept",
+      "student_answer": "Last-In, First-Out. It means the last element added to the stack is the first one to be removed . Its Application is UNDO Function",
+      "correct_answer": "LIFO stands for Last-In, First-Out. It means the last element added to the stack is the first one to be removed. A real-world example is the 'Undo' feature in text editors or function call management (call stack) in compilers.",
+      "points_earned": 8.0,
+      "points_possible": 10.0,
+      "is_correct": false,
+      "feedback": "You have correctly defined the LIFO principle and provided a valid example of its application in computing. However, your answer could be improved by providing a bit more detail in the explanation and example.",
+      "detailed_analysis": {
+        "strengths": [
+          "The student correctly identified and defined the LIFO principle.",
+          "The student provided a valid example of the LIFO principle in computing."
+        ],
+        "weaknesses": [
+          "The explanation of the LIFO principle is minimal and could be expanded for clarity.",
+          "The example provided lacks detail on how the 'Undo' function specifically uses LIFO."
+        ],
+        "misconceptions": []
+      },
+      "suggestions": [
+        "Expand on the definition of LIFO by explaining its operation in a stack data structure.",
+        "Provide more detail on how the 'Undo' function uses the LIFO principle, such as describing the process of reversing actions in the order they were performed."
+      ]
+    },
+    {
+      "question_id": "q_003_python_coding",
+      "student_answer": "def reverse_list(my_list) :\\n new_list = []\\n for i in range(len(my_list) -1): \\nnew_list.append(my_list(len(my_list) - i - 1))  \\nreturn new_list",
+      "correct_answer": "def reverse_list(arr):\n    new_arr = []\n    for i in range(len(arr) - 1, -1, -1):\n        new_arr.append(arr[i])\n    return new_arr",
+      "points_earned": 12.0,
+      "points_possible": 20.0,
+      "is_correct": false,
+      "feedback": "Your attempt to reverse the list is close, but there are a few issues that need to be addressed. The loop should iterate from the last index to the first, but your loop currently iterates from the first index to the second-to-last index. Additionally, the way you are trying to access elements in the list is incorrect. You should be using indexing with square brackets, not parentheses.",
+      "detailed_analysis": {
+        "strengths": [
+          "You correctly initialized a new list to store the reversed elements.",
+          "You used a loop to iterate over the list, which is a good approach."
+        ],
+        "weaknesses": [
+          "The loop does not iterate over the correct range of indices.",
+          "You used incorrect syntax for accessing list elements."
+        ],
+        "misconceptions": [
+          "There seems to be a misunderstanding about how to correctly access elements in a list using indices."
+        ]
+      },
+      "suggestions": [
+        "Adjust the loop to iterate from the last index to the first by using 'range(len(my_list) - 1, -1, -1)'.",
+        "Use square brackets to access elements in a list, like 'my_list[index]'.",
+        "Test your function with different lists to ensure it works as expected."
+      ]
+    },
+    {
+      "question_id": "q_004_binary_conversion",
+      "student_answer": "101010",
+      "correct_answer": 101010,
+      "points_earned": 5.0,
+      "points_possible": 5.0,
+      "is_correct": true,
+      "feedback": "Correct!",
+      "detailed_analysis": null,
+      "suggestions": []
+    },
+    {
+      "question_id": "q_005_linked_list_memory",
+      "student_answer": "False",
+      "correct_answer": "False",
+      "points_earned": 5.0,
+      "points_possible": 5.0,
+      "is_correct": true,
+      "feedback": "Correct!",
+      "detailed_analysis": null,
+      "suggestions": []
+    },
+    {
+      "question_id": "q_006_sorting_stability",
+      "student_answer": "Quick Sort",
+      "correct_answer": "Quick Sort",
+      "points_earned": 5.0,
+      "points_possible": 5.0,
+      "is_correct": true,
+      "feedback": "Correct!",
+      "detailed_analysis": null,
+      "suggestions": []
+    },
+    {
+      "question_id": "q_007_queue_operations",
+      "student_answer": "enqueue enters data into back of queue and dequeue get the first element of queue",
+      "correct_answer": "Enqueue adds an element to the rear (back) of the queue, while dequeue removes an element from the front of the queue. This follows the FIFO (First-In, First-Out) principle.",
+      "points_earned": 6.4,
+      "points_possible": 8.0,
+      "is_correct": false,
+      "feedback": "Your answer captures the basic idea of enqueue and dequeue operations in a queue, but it lacks precision in the description of dequeue. Enqueue is correctly described as adding data to the back of the queue. However, the description of dequeue should specify that it removes the first element from the front of the queue, not just 'get' it. Remember, dequeue involves removal, not just access.",
+      "detailed_analysis": {
+        "strengths": [
+          "The student correctly identified that enqueue involves adding data to the back of the queue."
+        ],
+        "weaknesses": [
+          "The description of dequeue is incomplete as it does not specify the removal of the element."
+        ],
+        "misconceptions": [
+          "The student may believe that dequeue only accesses the first element rather than removing it."
+        ]
+      },
+      "suggestions": [
+        "Ensure that you specify the removal aspect of the dequeue operation in future answers.",
+        "Review the FIFO principle to reinforce your understanding of queue operations."
+      ]
+    },
+    {
+      "question_id": "q_008_binary_search_tree",
+      "student_answer": "2",
+      "correct_answer": 2,
+      "points_earned": 5.0,
+      "points_possible": 5.0,
+      "is_correct": true,
+      "feedback": "Correct!",
+      "detailed_analysis": null,
+      "suggestions": []
+    },
+    {
+      "question_id": "q_009_python_dict_get",
+      "student_answer": "age = student_data.get('age' , '-1')",
+      "correct_answer": "value = student_data.get('age', -1)",
+      "points_earned": 8.0,
+      "points_possible": 10.0,
+      "is_correct": false,
+      "feedback": "Your code snippet is almost correct, but there is a small issue with the default value you provided. The default value should be an integer -1, but you provided it as a string '-1'. This could lead to unexpected behavior if you expect an integer value. Ensure that the default value matches the expected data type.",
+      "detailed_analysis": {
+        "strengths": [
+          "You correctly used the .get() method to attempt to retrieve the value for the key 'age' from the dictionary."
+        ],
+        "weaknesses": [
+          "The default value provided is a string instead of an integer."
+        ],
+        "misconceptions": [
+          "You might be under the impression that the default value type does not matter, but it should match the expected data type."
+        ]
+      },
+      "suggestions": [
+        "Change the default value from '-1' to -1 to ensure it is an integer. This will make your code more robust and prevent potential type-related issues."
+      ]
+    },
+    {
+      "question_id": "q_010_big_o_nested_loops",
+      "student_answer": "O(n^2)",
+      "correct_answer": "O(n^2)",
+      "points_earned": 5.0,
+      "points_possible": 5.0,
+      "is_correct": true,
+      "feedback": "Correct!",
+      "detailed_analysis": null,
+      "suggestions": []
+    }
+  ],
+  "total_points_earned": 64.4,
+  "total_points_possible": 78.0,
+  "graded_at": "2025-12-15T23:22:06.693018",
+  "overall_feedback": "\n            <div class=\"result-summary grade-good\">\n                <div class=\"score-header\">\n                    <h3>Overall Performance</h3>\n                    <div class=\"score-large\">\n                        64.4 <span class=\"text-muted\">/ 78.0</span>\n                    </div>\n                    <div class=\"percentage-badge\">82.6%</div>\n                </div>\n                <div class=\"performance-text\">\n                    <strong>👍 Good job!</strong>\n                </div>\n            </div>\n            \n\n            <div class=\"stats-bar\">\n                <div class=\"stat-item\">\n                    <span class=\"icon\">✅</span>\n                    <span>Correct: <strong>6/10</strong></span>\n                </div>\n                <div class=\"stat-item\">\n                    <span class=\"icon\">📊</span>\n                    <span>Accuracy: <strong>60%</strong></span>\n                </div>\n            </div>\n            \n\n                    <div class=\"ai-feedback-container\">\n                        <h4>🤖 AI Analysis & Recommendations</h4>\n                        <div class=\"ai-content\">\n                            <strong>Overall Performance Summary:</strong><br>Congratulations on completing your CS101: Data Structures & Algorithms Midterm with a score of 82.6%! This is a solid performance, demonstrating a strong understanding of the course material. You've shown great effort and dedication, and it's clear that you're on the right track in mastering the concepts of data structures and algorithms.<br><br><strong>Key Strengths Demonstrated:</strong><br>You excelled in several areas, particularly in questions related to time complexity, binary conversion, linked list memory, sorting stability, and big O notation for nested loops. Your perfect scores in these areas highlight your strong analytical skills and your ability to grasp complex theoretical concepts. These strengths are crucial as they form the foundation for more advanced topics in computer science.<br><br><strong>Main Areas for Improvement:</strong><br>While your overall performance is commendable, there are a few areas where you can focus on improving. The coding question on Python and understanding stack concepts were challenging for you, as reflected in your scores. Additionally, enhancing your grasp of queue operations and the use of Python's dictionary methods could further solidify your understanding.<br><br><strong>Specific Study Recommendations:</strong><br>To strengthen your coding skills, consider practicing more Python coding exercises, particularly those involving data structures. Websites like LeetCode or HackerRank offer a plethora of problems that can help you improve. For stack and queue concepts, revisiting your lecture notes and textbooks or watching tutorial videos could offer new insights. Additionally, working on small projects or exercises that incorporate these data structures will reinforce your learning.<br><br><strong>Encouraging Conclusion:</strong><br>Keep up the great work! Your dedication and hard work are evident in your performance, and with a little more focus on the areas mentioned, you'll continue to improve and succeed. Remember, each exam is a stepping stone to mastering the subject, and you are well on your way. Keep pushing forward, and don't hesitate to seek help or resources when needed. You've got this!\n                        </div>\n                    </div>\n                    ",
+  "analytics": {
+    "total_questions": 10,
+    "correct_answers": 6,
+    "accuracy": 0.6,
+    "performance_by_type": {
+      "multiple_choice": {
+        "total": 3,
+        "correct": 3,
+        "points_earned": 15.0,
+        "points_possible": 15.0
+      },
+      "short_answer": {
+        "total": 2,
+        "correct": 0,
+        "points_earned": 14.4,
+        "points_possible": 18.0
+      },
+      "code": {
+        "total": 2,
+        "correct": 0,
+        "points_earned": 20.0,
+        "points_possible": 30.0
+      },
+      "numerical": {
+        "total": 2,
+        "correct": 2,
+        "points_earned": 10.0,
+        "points_possible": 10.0
+      },
+      "true_false": {
+        "total": 1,
+        "correct": 1,
+        "points_earned": 5.0,
+        "points_possible": 5.0
+      }
+    }
+  }
+}
